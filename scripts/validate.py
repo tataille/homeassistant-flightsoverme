@@ -9,7 +9,7 @@ manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"
 version = manifest.get("version", "")
 if not re.fullmatch(r"\d+\.\d+\.\d+", version):
     raise SystemExit(f"Invalid integration version: {version!r}")
-for path in [INTEGRATION / "strings.json", *sorted((INTEGRATION / "translations").glob("*.json")), ROOT / "hacs.json", ROOT / ".release-please-config.json", ROOT / ".release-please-manifest.json", ROOT / "www" / "aircraft-png" / "catalog.json"]:
+for path in [INTEGRATION / "strings.json", *sorted((INTEGRATION / "translations").glob("*.json")), ROOT / "hacs.json", ROOT / "release-please-config.json", ROOT / ".release-please-manifest.json", ROOT / "www" / "aircraft-png" / "catalog.json"]:
     json.loads(path.read_text(encoding="utf-8"))
 catalog = json.loads((ROOT / "www" / "aircraft-png" / "catalog.json").read_text(encoding="utf-8"))
 for aircraft in catalog:
