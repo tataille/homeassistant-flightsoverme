@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Aircraft above home",
+        "description": "The location comes from Home Assistant general settings. Choose the visual mode and search radius (1 to 100 km, 20 km by default). The same radius sets the radar range.",
+        "data": {
+          "display_mode": "Display mode",
+          "radius_km": "Search radius (km)"
+        }
+      },
+      "reconfigure": {
+        "title": "Display mode and search radius",
+        "description": "Change the visual mode and aircraft search range.",
+        "data": {
+          "display_mode": "Display mode",
+          "radius_km": "Search radius (km)"
+        }
+      }
+    },
+    "error": {
+      "location_not_configured": "Set the latitude and longitude in Home Assistant settings first."
+    },
+    "abort": {
+      "already_configured": "This integration is already configured.",
+      "reconfigure_successful": "Configuration updated."
+    }
+  },
+  "selector": {
+    "display_mode": {
+      "options": {
+        "house": "House illustration",
+        "radar": "Radar"
+      }
+    }
+  }
+}

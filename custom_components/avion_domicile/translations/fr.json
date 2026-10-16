@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Avion au-dessus du domicile",
+        "description": "La position provient des paramètres généraux de Home Assistant. Choisissez le visuel et le rayon de recherche (1 à 100 km, 20 km par défaut). Le même rayon détermine la portée du radar.",
+        "data": {
+          "display_mode": "Mode d’affichage",
+          "radius_km": "Rayon de recherche (km)"
+        }
+      },
+      "reconfigure": {
+        "title": "Mode et rayon de recherche",
+        "description": "Modifiez le visuel et la portée de recherche des avions.",
+        "data": {
+          "display_mode": "Mode d’affichage",
+          "radius_km": "Rayon de recherche (km)"
+        }
+      }
+    },
+    "error": {
+      "location_not_configured": "Définissez d'abord la latitude et la longitude dans les paramètres de Home Assistant."
+    },
+    "abort": {
+      "already_configured": "Cette intégration est déjà configurée.",
+      "reconfigure_successful": "Configuration mise à jour."
+    }
+  },
+  "selector": {
+    "display_mode": {
+      "options": {
+        "house": "Visuel maison",
+        "radar": "Radar"
+      }
+    }
+  }
+}
