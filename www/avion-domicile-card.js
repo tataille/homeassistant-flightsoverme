@@ -14,10 +14,22 @@ class AvionDomicileCard extends HTMLElement {
   getAircraftSensorState() {
     const states = this._hass?.states || {};
     const configured = this.config?.entity ? states[this.config.entity] : null;
-    if (configured && Array.isArray(configured.attributes?.aircraft)) return configured;
-    return Object.values(states).find(state =>
-      state.attributes?.data_source === "ADSB.lol" && Array.isArray(state.attributes?.aircraft)
-    ) || null;
+    // Keep a configured sensor even while HA marks it unavailable; its attributes
+    // may temporarily disappear during an API error.
+    if (configured) return configured;
+    const allStates = Object.values(states);
+    return allStates.find(state => state.attributes?.data_source === "ADSB.lol")
+      || allStates.find(state => {
+        const entityId = String(state.entity_id || "").toLowerCase();
+        const friendlyName = String(state.attributes?.friendly_name || "").toLowerCase();
+        return entityId.includes("avion_le_plus_proche")
+          || entityId.includes("nearest_aircraft")
+          || friendlyName.includes("avion le plus proche");
+      })
+      || allStates.find(state =>
+        "radius_km" in (state.attributes || {}) && "display_mode" in (state.attributes || {})
+      )
+      || null;
   }
 
   getCardSize() {
@@ -30,6 +42,10 @@ class AvionDomicileCard extends HTMLElement {
     const state = this.getAircraftSensorState();
     if (!state) {
       this.innerHTML = `<ha-card><div style="padding:24px">Capteur Flights Over Me introuvable. Vérifiez que l’intégration est installée et chargée.</div></ha-card>`;
+      return;
+    }
+    if (state.state === "unavailable") {
+      this.innerHTML = `<ha-card><div style="padding:24px"><strong>Capteur Flights Over Me indisponible</strong><br>Home Assistant n’a pas reçu de réponse de la source des vols au dernier rafraîchissement. Consultez Paramètres → Système → Journaux pour le détail.</div></ha-card>`;
       return;
     }
     const attrs = state.attributes || {};
