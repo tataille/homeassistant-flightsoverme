@@ -39,6 +39,10 @@ class AircraftCoordinator(DataUpdateCoordinator):
         self._metadata_cache: dict[str, tuple[float, dict]] = {}
         self._military_hexes: set[str] = set()
         self._military_cache_expires = 0.0
+        self._rate_limit_retry_at = 0.0
+        self._rate_limit_delay = 60.0
+        self._rate_limit_successes = 0
+        self._last_source_error: str | None = None
         super().__init__(
             hass,
             _LOGGER,
@@ -47,11 +51,27 @@ class AircraftCoordinator(DataUpdateCoordinator):
         )
 
     async def _async_update_data(self):
+        now = time.monotonic()
+        if now < self._rate_limit_retry_at:
+            if self.data is not None:
+                return {**self.data, "stale": True, "source_error": self._last_source_error}
+            raise UpdateFailed(self._last_source_error or "Requête ADSB.lol temporairement suspendue")
+
         url = f"{API_BASE}/lat/{self.latitude}/lon/{self.longitude}/dist/{self.radius_nm}"
         try:
             async with self.session.get(url, timeout=15) as response:
                 if response.status == 429:
-                    raise UpdateFailed("Limite de requêtes ADSB.lol atteinte")
+                    retry_after = _number(response.headers.get("Retry-After"))
+                    delay = min(max(retry_after or self._rate_limit_delay, 60.0), 3600.0)
+                    self._rate_limit_retry_at = time.monotonic() + delay
+                    self._rate_limit_delay = min(delay * 2, 1800.0)
+                    self._rate_limit_successes = 0
+                    self._last_source_error = (
+                        f"Limite de requêtes ADSB.lol atteinte ; nouvel essai dans {math.ceil(delay)} s"
+                    )
+                    if self.data is not None:
+                        return {**self.data, "stale": True, "source_error": self._last_source_error}
+                    raise UpdateFailed(self._last_source_error)
                 response.raise_for_status()
                 payload = await response.json(content_type=None)
         except (ClientError, TimeoutError, ValueError) as err:
@@ -100,7 +120,13 @@ class AircraftCoordinator(DataUpdateCoordinator):
             # Enrich the four closest planes so the card can switch between
             # the featured aircraft and up to three nearby alternatives.
             await asyncio.gather(*(self._async_enrich_aircraft(item) for item in aircraft[:4]))
-        return {"aircraft": aircraft, "count": len(aircraft)}
+        self._rate_limit_retry_at = 0.0
+        self._last_source_error = None
+        self._rate_limit_successes += 1
+        if self._rate_limit_successes >= 20:
+            self._rate_limit_delay = 60.0
+            self._rate_limit_successes = 0
+        return {"aircraft": aircraft, "count": len(aircraft), "stale": False, "source_error": None}
 
     async def _async_military_hexes(self) -> set[str]:
         """Return cached ICAO hex codes flagged as military by ADSB.lol."""
