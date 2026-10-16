@@ -34,6 +34,8 @@ class AircraftCoordinator(DataUpdateCoordinator):
         self.radius_nm = radius_km / 1.852
         self.session = async_get_clientsession(hass)
         self._metadata_cache: dict[str, tuple[float, dict]] = {}
+        self._military_hexes: set[str] = set()
+        self._military_cache_expires = 0.0
         super().__init__(
             hass,
             _LOGGER,
@@ -51,6 +53,8 @@ class AircraftCoordinator(DataUpdateCoordinator):
                 payload = await response.json(content_type=None)
         except (ClientError, TimeoutError, ValueError) as err:
             raise UpdateFailed(f"Impossible de récupérer les avions : {err}") from err
+
+        military_hexes = await self._async_military_hexes()
 
         aircraft = []
         for raw in payload.get("aircraft", []):
@@ -78,6 +82,7 @@ class AircraftCoordinator(DataUpdateCoordinator):
                 "seen_seconds": _number(raw.get("seen")),
                 "squawk": raw.get("squawk"),
                 "category": raw.get("category"),
+                "is_military": (raw.get("hex") or "").lower() in military_hexes,
                 "on_ground": raw.get("alt_baro") == "ground",
                 "source": raw.get("type"),
             })
@@ -93,6 +98,29 @@ class AircraftCoordinator(DataUpdateCoordinator):
             # the featured aircraft and up to three nearby alternatives.
             await asyncio.gather(*(self._async_enrich_aircraft(item) for item in aircraft[:4]))
         return {"aircraft": aircraft, "count": len(aircraft)}
+
+    async def _async_military_hexes(self) -> set[str]:
+        """Return cached ICAO hex codes flagged as military by ADSB.lol."""
+        now = time.monotonic()
+        if now < self._military_cache_expires:
+            return self._military_hexes
+        try:
+            async with self.session.get(f"{API_BASE}/mil", timeout=15) as response:
+                if response.status == 429:
+                    return self._military_hexes
+                response.raise_for_status()
+                payload = await response.json(content_type=None)
+            self._military_hexes = {
+                str(item.get("hex", "")).strip().lower()
+                for item in payload.get("aircraft", [])
+                if isinstance(item, dict) and item.get("hex")
+            }
+            self._military_cache_expires = now + 600
+        except (ClientError, TimeoutError, ValueError) as err:
+            _LOGGER.debug("Optional military aircraft lookup failed: %s", err)
+            # Retry sooner after an error while retaining the previous snapshot.
+            self._military_cache_expires = now + 60
+        return self._military_hexes
 
     async def _async_enrich_aircraft(self, aircraft: dict) -> None:
         """Add cached aircraft, airline, and best-effort route details."""
