@@ -5,11 +5,11 @@ import json, sys, zipfile
 from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 tag = sys.argv[1]
-version = json.loads((root / "custom_components/avion_domicile/manifest.json").read_text())["version"]
+version = json.loads((root / "custom_components/flights_over_me/manifest.json").read_text())["version"]
 if tag.removeprefix("v") != version:
     raise SystemExit(f"Tag {tag} does not match manifest version {version}")
-output = root / f"avion-domicile-ha-{version}.zip"
-include = [root / "custom_components/avion_domicile", root / "README.md", root / "hacs.json", root / "LICENSE"]
+output = root / f"flights-over-me-ha-{version}.zip"
+include = [root / "custom_components/flights_over_me", root / "README.md", root / "hacs.json", root / "LICENSE"]
 with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED, compresslevel=8) as archive:
     for item in include:
         if item.is_file():

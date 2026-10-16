@@ -1,4 +1,4 @@
-DOMAIN = "avion_domicile"
+DOMAIN = "flights_over_me"
 CONF_RADIUS_KM = "radius_km"
 CONF_DISPLAY_MODE = "display_mode"
 MODE_HOUSE = "house"
@@ -6,5 +6,5 @@ MODE_RADAR = "radar"
 DEFAULT_DISPLAY_MODE = MODE_HOUSE
 DEFAULT_RADIUS_KM = 20
 MAX_RADIUS_KM = 100
-SCAN_INTERVAL_SECONDS = 60
+SCAN_INTERVAL_SECONDS = 15
 API_BASE = "https://api.adsb.lol/v2"

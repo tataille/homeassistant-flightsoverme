@@ -4,8 +4,10 @@ from __future__ import annotations
 import json, re, sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
-INTEGRATION = ROOT / "custom_components" / "avion_domicile"
+INTEGRATION = ROOT / "custom_components" / "flights_over_me"
 manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"))
+if manifest.get("domain") != "flights_over_me":
+    raise SystemExit("Canonical integration domain must be flights_over_me")
 version = manifest.get("version", "")
 if not re.fullmatch(r"\d+\.\d+\.\d+", version):
     raise SystemExit(f"Invalid integration version: {version!r}")
