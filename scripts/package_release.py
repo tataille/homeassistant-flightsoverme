@@ -9,7 +9,7 @@ version = json.loads((root / "custom_components/avion_domicile/manifest.json").r
 if tag.removeprefix("v") != version:
     raise SystemExit(f"Tag {tag} does not match manifest version {version}")
 output = root / f"avion-domicile-ha-{version}.zip"
-include = [root / "custom_components/avion_domicile", root / "www", root / "README.md", root / "hacs.json", root / "LICENSE"]
+include = [root / "custom_components/avion_domicile", root / "README.md", root / "hacs.json", root / "LICENSE"]
 with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED, compresslevel=8) as archive:
     for item in include:
         if item.is_file():

@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import CONF_RADIUS_KM, DOMAIN, SCAN_INTERVAL_SECONDS
@@ -13,6 +16,17 @@ from .coordinator import AircraftCoordinator
 
 PLATFORMS = [Platform.SENSOR]
 _LOGGER = logging.getLogger(__name__)
+FRONTEND_URL = f"/{DOMAIN}/static"
+
+
+async def async_setup(hass: HomeAssistant, config: dict) -> bool:
+    """Register the bundled Lovelace card and dashboard strategy."""
+    static_dir = Path(__file__).parent / "www"
+    await hass.http.async_register_static_paths(
+        [StaticPathConfig(FRONTEND_URL, str(static_dir), cache_headers=False)]
+    )
+    add_extra_js_url(hass, f"{FRONTEND_URL}/avion-domicile-card.js")
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
