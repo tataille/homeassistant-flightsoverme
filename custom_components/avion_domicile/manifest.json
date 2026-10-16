@@ -1,6 +1,6 @@
 {
   "domain": "avion_domicile",
-  "name": "Avion au-dessus du domicile",
+  "name": "Flights Over Me",
   "codeowners": [],
   "config_flow": true,
   "dependencies": ["frontend"],

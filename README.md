@@ -1,4 +1,4 @@
-# Avion au-dessus du domicile — Home Assistant
+# Flights Over Me — Home Assistant
 
 [![Validation](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml/badge.svg)](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml) [![Dernière version](https://img.shields.io/github/v/release/tataille/homeassistant-flightsoverme)](https://github.com/tataille/homeassistant-flightsoverme/releases)
 
@@ -17,8 +17,8 @@ Le service fournit des positions ADS-B reçues par son réseau. La couverture n'
 ## Installation manuelle
 
 1. Avec HACS, installez le dépôt comme intégration. En installation manuelle, copiez uniquement `custom_components/avion_domicile` vers `<config>/custom_components/avion_domicile` ; les fichiers de la carte et les images sont maintenant inclus dans ce dossier.
-2. Redémarrez Home Assistant, puis dans **Paramètres → Appareils et services → Ajouter une intégration**, cherchez **Avion au-dessus du domicile**. Choisissez le visuel **Maison** ou **Radar**, puis un rayon de 1 à 100 km (20 km par défaut). Une limite de 100 km évite une mire trop chargée ; le même rayon sert aux deux visuels.
-3. L'intégration enregistre et charge automatiquement la ressource Lovelace. Avec Home Assistant **2026.5 ou plus récent**, crée le tableau de bord prérempli depuis **Paramètres → Tableaux de bord → Ajouter un tableau de bord → Tableaux de bord communautaires → Avions au-dessus du domicile**. Home Assistant crée alors un nouveau tableau de bord contenant la carte.
+2. Redémarrez Home Assistant, puis dans **Paramètres → Appareils et services → Ajouter une intégration**, cherchez **Flights Over Me**. Choisissez le visuel **Maison** ou **Radar**, puis un rayon de 1 à 100 km (20 km par défaut). Une limite de 100 km évite une mire trop chargée ; le même rayon sert aux deux visuels.
+3. L'intégration enregistre et charge automatiquement la ressource Lovelace. Avec Home Assistant **2026.5 ou plus récent**, crée le tableau de bord prérempli depuis **Paramètres → Tableaux de bord → Ajouter un tableau de bord → Tableaux de bord communautaires → Flights Over Me**. Home Assistant crée alors un nouveau tableau de bord contenant la carte.
 
 Sur les versions Home Assistant antérieures à 2026.5, ajoute la carte manuellement au tableau de bord :
 

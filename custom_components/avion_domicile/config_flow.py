@@ -1,4 +1,4 @@
-"""Configuration flow for Avion au-dessus du domicile."""
+"""Configuration flow for Flights Over Me."""
 from __future__ import annotations
 
 import voluptuous as vol
@@ -31,7 +31,7 @@ class AvionDomicileConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 await self.async_set_unique_id(DOMAIN)
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
-                    title="Avion au-dessus du domicile",
+                    title="Flights Over Me",
                     data=user_input,
                 )
 

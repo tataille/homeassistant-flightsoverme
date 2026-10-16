@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Aircraft above home",
+        "title": "Flights Over Me",
         "description": "The location comes from Home Assistant general settings. Choose the visual mode and search radius (1 to 100 km, 20 km by default). The same radius sets the radar range.",
         "data": {
           "display_mode": "Display mode",
