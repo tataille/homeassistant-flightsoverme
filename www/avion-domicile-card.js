@@ -3,7 +3,6 @@ import { aircraftPngForType } from "./aircraft-png-library.js";
 /* Lovelace card: per-ICAO neutral profile PNG, selectable nearby flights, and live weather. */
 class AvionDomicileCard extends HTMLElement {
   setConfig(config) {
-    if (!config.entity) throw new Error("Ajoutez l'entité sensor.avion_au_dessus_du_domicile_avion_le_plus_proche");
     this.config = config;
   }
 
@@ -12,15 +11,28 @@ class AvionDomicileCard extends HTMLElement {
     this.render();
   }
 
+  getAircraftSensorState() {
+    const states = this._hass?.states || {};
+    const configured = this.config?.entity ? states[this.config.entity] : null;
+    if (configured && Array.isArray(configured.attributes?.aircraft)) return configured;
+    return Object.values(states).find(state =>
+      state.attributes?.data_source === "ADSB.lol" && Array.isArray(state.attributes?.aircraft)
+    ) || null;
+  }
+
   getCardSize() {
-    const count = this._hass?.states?.[this.config?.entity]?.attributes?.aircraft?.length || 1;
+    const count = this.getAircraftSensorState()?.attributes?.aircraft?.length || 1;
     return 3 + Math.min(Math.max(count - 1, 0), 3);
   }
 
   render() {
     if (!this.config || !this._hass) return;
-    const state = this._hass.states[this.config.entity];
-    const attrs = state?.attributes || {};
+    const state = this.getAircraftSensorState();
+    if (!state) {
+      this.innerHTML = `<ha-card><div style="padding:24px">Capteur Flights Over Me introuvable. Vérifiez que l’intégration est installée et chargée.</div></ha-card>`;
+      return;
+    }
+    const attrs = state.attributes || {};
     const radarMode = attrs.display_mode === "radar";
     const radiusKm = Number(attrs.radius_km) || 20;
     const allAircraft = Array.isArray(attrs.aircraft) ? attrs.aircraft : [];
