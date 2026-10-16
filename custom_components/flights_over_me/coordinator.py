@@ -31,7 +31,10 @@ class AircraftCoordinator(DataUpdateCoordinator):
         self.latitude = latitude
         self.longitude = longitude
         self.radius_km = radius_km
-        self.radius_nm = radius_km / 1.852
+        # ADSB.lol's /dist/{radius} endpoint expects an integer nautical-mile radius.
+        # Round up so the API query still covers the configured kilometer radius;
+        # _distance_km applies the exact configured radius locally afterwards.
+        self.radius_nm = math.ceil(radius_km / 1.852)
         self.session = async_get_clientsession(hass)
         self._metadata_cache: dict[str, tuple[float, dict]] = {}
         self._military_hexes: set[str] = set()
@@ -44,7 +47,7 @@ class AircraftCoordinator(DataUpdateCoordinator):
         )
 
     async def _async_update_data(self):
-        url = f"{API_BASE}/lat/{self.latitude}/lon/{self.longitude}/dist/{self.radius_nm:.1f}"
+        url = f"{API_BASE}/lat/{self.latitude}/lon/{self.longitude}/dist/{self.radius_nm}"
         try:
             async with self.session.get(url, timeout=15) as response:
                 if response.status == 429:
