@@ -59,9 +59,9 @@ class AvionDomicileCard extends HTMLElement {
     const altitude = plane?.altitude_m != null ? `${Math.round(plane.altitude_m).toLocaleString("fr-FR")} m d’altitude` : "Altitude indisponible";
     const speed = plane?.ground_speed_kmh != null ? `${Math.round(plane.ground_speed_kmh)} km/h` : "Vitesse indisponible";
     const distance = plane?.distance_km != null ? `${plane.distance_km.toLocaleString("fr-FR")} km du domicile` : "";
-    const model = [plane?.aircraft_manufacturer, plane?.aircraft_type || plane?.description || plane?.type].filter(Boolean).join(" ") || plane?.registration || "Type d’avion non identifié";
-    const airline = plane?.airline_name || "Compagnie non identifiée";
-    const logo = safeImageUrl(plane?.airline_logo);
+    const model = [plane?.aircraft_manufacturer, plane?.aircraft_type || plane?.description || plane?.type].filter(Boolean).join(" ") || plane?.registration || (plane?.is_military ? "Type militaire inconnu" : "Type d’avion non identifié");
+    const airline = plane?.is_military ? "Appareil militaire" : plane?.airline_name || "Compagnie non identifiée";
+    const logo = plane?.is_military ? null : safeImageUrl(plane?.airline_logo);
     const count = attrs.aircraft_count ?? 0;
     const heading = Number.isFinite(Number(plane?.heading)) ? Number(plane.heading) : 0;
     const freshness = plane?.seen_seconds != null ? `vu il y a ${Math.max(0, Math.round(plane.seen_seconds))} s` : "Données ADS-B en direct";
@@ -71,6 +71,7 @@ class AvionDomicileCard extends HTMLElement {
     const aircraftImage = aircraftArtwork?.src
       ? `<img class="aircraft-png" src="${escapeHtml(aircraftArtwork.src)}" alt="${escapeHtml(aircraftArtwork.model)} de profil, nez vers la droite">`
       : "";
+    const militaryFallback = `<div class="military-fallback" role="img" aria-label="Silhouette générique d’un appareil militaire, modèle inconnu"><svg class="military-silhouette" viewBox="0 0 420 160" aria-hidden="true"><path class="military-tail" d="M88 69 68 28 109 37 143 69 89 80Z"/><path class="military-stabilizer" d="m62 76-43-15 12 25 49 9Z"/><path class="military-body" d="M25 81c24-10 69-13 119-13h198c25 0 45 5 58 13 7 4 7 10 0 14-13 8-33 13-58 13H144C94 108 50 102 25 93c-7-3-7-9 0-12Z"/><path class="military-wing" d="m190 99 63 37h51l-44-38Z"/><path class="military-engine" d="M242 108h48c8 0 13 5 13 11v6h-55c-9 0-14-5-14-11s3-6 8-6Z"/><path class="military-cockpit" d="m367 73 20 4 9 10h-29Z"/><path class="military-window" d="m370 76 6 1 4 5h-10Zm9 2 6 1 4 4h-8Z"/></svg><div class="military-label">APPAREIL MILITAIRE · ${escapeHtml(aircraftTypeCode || "TYPE INCONNU")}</div></div>`;
     const skyAirlineLogo = logo
       ? `<img src="${escapeHtml(logo)}" alt="Logo ${escapeHtml(airline)}">`
       : `<span>${escapeHtml(mark)}</span>`;
@@ -94,7 +95,7 @@ class AvionDomicileCard extends HTMLElement {
       <div class="live"><span></span> LIVE · ${timeLabel} · ${new Date().toLocaleTimeString("fr-FR", {hour:"2-digit", minute:"2-digit"})}</div>
       ${weatherBadge}
       <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div><div class="precipitation"></div><div class="fog"></div>
-      ${aircraftImage ? `<div class="aircraft-wrap">${aircraftImage}</div>` : plane ? `<div class="ufo-fallback" role="img" aria-label="Avion non identifié, illustration OVNI de remplacement"><div class="ufo-beam"></div><div class="ufo"><div class="ufo-dome"></div><div class="ufo-disc"><i></i><i></i><i></i></div></div><div class="ufo-label">TYPE D’AVION INCONNU · ${escapeHtml(aircraftTypeCode || "ICAO INDISPONIBLE")}</div></div>` : `<div class="aircraft-empty">En attente d’un avion détecté</div>`}
+      ${aircraftImage ? `<div class="aircraft-wrap">${aircraftImage}</div>` : plane?.is_military ? militaryFallback : plane ? `<div class="ufo-fallback" role="img" aria-label="Cible aérienne non identifiée, illustration OVNI de remplacement"><div class="ufo-beam"></div><div class="ufo"><div class="ufo-dome"></div><div class="ufo-disc"><i></i><i></i><i></i></div></div><div class="ufo-label">TYPE D’AVION INCONNU · ${escapeHtml(aircraftTypeCode || "ICAO INDISPONIBLE")}</div></div>` : `<div class="aircraft-empty">En attente d’un avion détecté</div>`}
     </div>`;
     const radarVisual = `<div class="radar-display">
       <div class="radar-heading">RADAR DU DOMICILE · ${timeLabel}</div>
@@ -107,7 +108,7 @@ class AvionDomicileCard extends HTMLElement {
       </div>
       ${weatherBadge}
     </div>`;
-    const logoMarkup = plane && (logo || mark) ? `<div class="sky-airline-logo" aria-label="Compagnie ${escapeHtml(airline)}">${skyAirlineLogo}</div>` : "";
+    const logoMarkup = plane && !plane.is_military && (logo || mark) ? `<div class="sky-airline-logo" aria-label="Compagnie ${escapeHtml(airline)}">${skyAirlineLogo}</div>` : "";
 
     this.innerHTML = `
       <ha-card>
@@ -154,7 +155,8 @@ class AvionDomicileCard extends HTMLElement {
         .info{padding:13px 16px 10px;background:#f2f0e8}.eyebrow{font:600 9px/1.4 monospace;letter-spacing:1.25px;color:#66645c;text-transform:uppercase;overflow-wrap:anywhere}.flight-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:3px}.route{min-width:0}.route-title{font:800 clamp(18px,4.5vw,27px)/1.12 system-ui,sans-serif;letter-spacing:.1px;overflow-wrap:anywhere;text-transform:uppercase}.route-meta{margin-top:3px;font:600 10px/1.25 monospace;letter-spacing:.8px;color:#6e6b63}
         .aircraft-model{margin-top:3px;color:#4c4b46;font:600 11px/1.35 monospace;letter-spacing:.4px}.details{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:7px;font:500 11px/1.4 monospace;color:#5f5d56}.footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid #c8c5ba;font:500 10px monospace;color:#77756d}.compass{width:30px;height:30px;border:1.5px solid #54534e;border-radius:50%;display:grid;place-items:center;color:#c84a48}.compass span{display:block;font-size:17px;transform-origin:center}
         .traffic{padding:8px 16px 14px;background:#f2f0e8}.traffic-heading{margin-bottom:6px;font:700 9px/1.3 monospace;letter-spacing:1px;color:#68665e}.traffic-list{display:grid;gap:5px}.traffic-item{width:100%;min-height:46px;padding:6px 9px;border:1px solid #dedbd1;border-radius:9px;background:#fffefa;color:#252522;text-align:left;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:8px;align-items:center;cursor:pointer}.traffic-item:active{background:#e9eef1;transform:scale(.995)}.traffic-route{font:750 12px/1.25 system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.traffic-meta{font:500 9px/1.3 system-ui,sans-serif;color:#65635c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.traffic-distance{grid-column:2;grid-row:1/3;font:700 10px/1 system-ui,sans-serif;color:#475965;white-space:nowrap}.traffic-more{padding:7px 2px 0;font:600 10px/1.3 system-ui,sans-serif;color:#68665e}
-        @media(max-width:420px){.visual{height:190px}.aircraft-wrap,.ufo-fallback{width:94%;height:120px;top:47%}.radar-scope{width:min(52vw,145px)}.sky-airline-logo{right:12px;bottom:12px;max-width:58px;height:22px}.details{gap:5px;font-size:10px}.traffic{padding-right:12px;padding-left:12px}}
+        .military-fallback{position:absolute;z-index:3;left:50%;top:48%;transform:translate(-50%,-50%);width:min(86%,360px);height:150px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}.military-silhouette{width:100%;height:118px;overflow:visible;filter:drop-shadow(0 3px 2px #182a3844)}.military-body,.military-tail,.military-stabilizer,.military-wing,.military-engine{fill:#e4e7df;stroke:#33424a;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}.military-tail,.military-stabilizer,.military-wing,.military-engine{fill:#a8b3aa}.military-cockpit{fill:#506775;stroke:#33424a;stroke-width:1.7;stroke-linejoin:round}.military-window{fill:#c7d8dd;stroke:#33424a;stroke-width:1}.military-label{padding:4px 7px;border:1px solid #c7d0c9;border-radius:9px;background:#ffffffc9;color:#344b45;font:700 8px/1.2 monospace;letter-spacing:.5px;text-align:center}.sky.time-night .military-body,.sky.time-night .military-tail,.sky.time-night .military-stabilizer,.sky.time-night .military-wing,.sky.time-night .military-engine{stroke:#1c2938}.sky.time-night .military-body{fill:#e4e8ef}.sky.time-night .military-tail,.sky.time-night .military-stabilizer,.sky.time-night .military-wing,.sky.time-night .military-engine{fill:#9aa8bb}
+        @media(max-width:420px){.visual{height:190px}.aircraft-wrap,.ufo-fallback,.military-fallback{width:94%;height:120px;top:47%}.military-silhouette{height:94px}.radar-scope{width:min(52vw,145px)}.sky-airline-logo{right:12px;bottom:12px;max-width:58px;height:22px}.details{gap:5px;font-size:10px}.traffic{padding-right:12px;padding-left:12px}}
       </style>`;
     const logoImage = this.querySelector(".sky-airline-logo img");
     if (logoImage) logoImage.addEventListener("error", () => { logoImage.remove(); const fallback = document.createElement("span"); fallback.textContent = mark; this.querySelector(".sky-airline-logo")?.append(fallback); }, {once:true});
