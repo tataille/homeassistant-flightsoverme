@@ -49,4 +49,6 @@ class NearestAircraftSensor(CoordinatorEntity, SensorEntity):
             "home_latitude": self.coordinator.latitude,
             "home_longitude": self.coordinator.longitude,
             "data_source": "ADSB.lol",
+            "data_source_stale": self.coordinator.data.get("stale", False) if self.coordinator.data else False,
+            "data_source_error": self.coordinator.data.get("source_error") if self.coordinator.data else None,
         }
