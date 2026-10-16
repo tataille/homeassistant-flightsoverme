@@ -5,7 +5,7 @@
 - Un PNG transparent dérivé d’un vrai modèle 3D et associé à un code type ICAO exact.
 - Vue de profil, nez orienté vers la droite dans le fichier source ; la carte conserve cette orientation. Le cap réel est indiqué séparément par la boussole.
 - Aucun logo ni couleur de compagnie dans le PNG. Le logo détecté est rendu indépendamment dans un cartouche au coin inférieur droit du visuel, au-dessus de la séparation avec les détails.
-- La carte n’invente pas de silhouette d’avion de remplacement : si le code ICAO n’a pas de PNG dédié, elle affiche un OVNI comme pictogramme clairement étiqueté « type inconnu ».
+- La carte utilise le PNG exact lorsqu’un modèle ICAO est disponible. Si un appareil est signalé militaire mais n’a pas de rendu dédié, elle affiche une silhouette neutre d’avion militaire, sans prétendre identifier sa forme exacte ni afficher de logo de compagnie. Pour une cible dont le type reste inconnu et qui n’est pas classée militaire, elle conserve l’OVNI comme pictogramme clairement étiqueté « type inconnu ».
 - La cellule est blanche, avec des contours graphite et des hachures légères façon croquis. Les volumes et le contour restent issus du modèle 3D ; le traitement ne reconstruit pas l’avion.
 
 ## Source et licence
