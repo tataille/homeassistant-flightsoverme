@@ -1,43 +1,143 @@
-# Flights Over Me — Home Assistant
+# Flights Over Me pour Home Assistant
 
-[![Validation](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml/badge.svg)](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml) [![Dernière version](https://img.shields.io/github/v/release/tataille/homeassistant-flightsoverme)](https://github.com/tataille/homeassistant-flightsoverme/releases)
+[![Validation](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml/badge.svg)](https://github.com/tataille/homeassistant-flightsoverme/actions/workflows/validate.yml)
+[![Licence Apache 2.0](https://img.shields.io/badge/Licence-Apache%202.0-blue)](LICENSE)
+[![Home Assistant 2024.4+](https://img.shields.io/badge/Home%20Assistant-2024.4%2B-18BCF2)](https://www.home-assistant.io/)
+[![Dernière version](https://img.shields.io/github/v/release/tataille/homeassistant-flightsoverme)](https://github.com/tataille/homeassistant-flightsoverme/releases)
+[![Téléchargements des releases](https://img.shields.io/github/downloads/tataille/homeassistant-flightsoverme/total?label=t%C3%A9l%C3%A9chargements%20des%20releases)](https://github.com/tataille/homeassistant-flightsoverme/releases)
 
-Intégration personnalisée et carte Lovelace inspirée de la référence fournie. À l'installation, choisissez le visuel maison (avion de profil et fond météo) ou le radar (mire circulaire orientée nord, domicile au centre et contacts positionnés selon leur direction et distance). Le rayon choisi détermine aussi l'échelle de la mire. La carte affiche les informations du vol sélectionné : destination et origine si elles sont reconnues, indicatif, compagnie et logo si identifiés, constructeur/type, altitude, vitesse sol, distance, cap et nombre d'appareils détectés. Jusqu'à trois autres vols proches apparaissent dans une liste sélectionnable sous la carte ; toucher une ligne ou un point radar affiche cet appareil en vedette. La sélection reste active tant que le vol est détecté, puis revient automatiquement à l'avion le plus proche. Les avions sont des rendus issus de modèles 3D réels, en PNG blanc avec un traitement croquis au trait, en vue de profil et le nez à droite. En mode maison, le logo de la compagnie est ajouté séparément au bas à droite du visuel ; aucune livrée n'est dessinée sur la cellule. Le cap reste indiqué par la boussole, sans faire pivoter la vue de profil.
+*Le compteur indique les téléchargements des fichiers joints aux releases GitHub. Il ne mesure pas le nombre d’installations et ne compte pas les archives de sources générées automatiquement.*
 
-## Source et limites des données
+**Découvrez les avions détectés près de votre domicile directement dans Home Assistant.**
 
-Les positions proviennent de l'API ouverte [ADSB.lol](https://api.adsb.lol/docs), interrogée toutes les 15 secondes. L'intégration consulte également, toutes les 10 minutes, la liste ADSB.lol des appareils militaires pour qualifier les contacts proches correspondants. Pour les quatre appareils les plus proches, elle complète les informations de type et de compagnie via l'API publique [ADSBDB](https://github.com/mrjackwills/adsbdb), et recherche l'itinéraire avec le point de route `/api/0/routeset` d'ADSB.lol, en mettant les résultats en cache 30 minutes. Les métadonnées déjà trouvées restent disponibles tant que l'appareil est détecté. La bibliothèque comprend 33 rendus PNG provenant des modèles 3D associés aux codes ICAO listés dans `www/aircraft-png/catalog.json`. Les modèles viennent du dépôt [Flightradar24/fr24-3d-models](https://github.com/Flightradar24/fr24-3d-models), qui crédite FlightGear et FGMEMBERS et indique la licence GPL-2.0 pour ces avions. Les couleurs originales sont supprimées ; la cellule est rendue blanche, puis les contours et hachures sont renforcés pour donner un aspect croquis au crayon. La géométrie reste issue du modèle 3D. Les PNG sont transparents pour laisser apparaître le fond météo de la carte. Si un appareil identifié militaire n'a pas de rendu exact, la carte présente une silhouette neutre d'avion et masque le logo commercial. Pour les autres contacts sans illustration ICAO, l'OVNI reste un pictogramme de remplacement explicitement étiqueté « type inconnu » ; il ne prétend pas représenter le modèle réel. La classification militaire dépend de la base ADSB.lol et peut ne pas couvrir tous les appareils. Voir `www/aircraft-png/ATTRIBUTION.txt` et `www/aircraft-png/LICENSE-GPL-2.0.txt` pour les crédits et la licence. La destination est une estimation basée sur l'indicatif et peut manquer ou être erronée, notamment pour les vols privés, charters, repositionnements ou non réguliers. Le logo, quand un code IATA est disponible, est chargé depuis le service d'images Kiwi.com. Ces compléments sont facultatifs : leur indisponibilité ne bloque pas les données ADS-B et la carte affiche « Destination inconnue » si aucune route n'est trouvée.
+Flights Over Me récupère les positions ADS-B proches de la maison et les présente dans une carte Lovelace dédiée. Choisissez une scène météo ou un radar, consultez les informations du vol le plus proche et sélectionnez un autre appareil lorsqu’il y en a plusieurs.
 
-Le fond météo utilise l'état courant d'une entité `weather` de Home Assistant, par défaut `weather.forecast_maison`. Le thème passe automatiquement du jour à la nuit selon l'état de `sun.sun` (lever et coucher du soleil) ; si cette entité manque, la carte se rabat sur l'heure locale (nuit avant 7 h et à partir de 20 h). Le mode radar adapte aussi sa palette à la période, tout en gardant les contacts visibles. Pluie, neige, brouillard, nuages, orage, vent, nuit et éclaircies modifient le ciel illustré. La température et la condition courante sont affichées sur la carte. La météo se met à jour automatiquement au rythme de mise à jour de l'entité Home Assistant. Pour utiliser une autre entité, précisez `weather_entity` dans le YAML de la carte.
+L’intégration lit la latitude et la longitude configurées dans Home Assistant. Elle s’installe depuis l’interface, sans YAML ni clé API.
 
-La position du domicile est lue depuis **Paramètres → Système → Général** de Home Assistant. Elle est transmise à ADSB.lol dans la requête de proximité; aucun compte ni clé API n'est demandé.
+## Ce que vous obtenez
 
-Le service fournit des positions ADS-B reçues par son réseau. La couverture n'est pas garantie partout et les appareils sans transpondeur ADS-B actif ne seront pas visibles. Les champs d'altitude, de vitesse, de type, d'indicatif et de compagnie peuvent manquer. L'affichage du logo dépend de la disponibilité d'un code IATA correspondant.
+- Une carte Lovelace en mode **Maison** : avion de profil, ciel météo et détails du vol.
+- Un mode **Radar** : domicile au centre, orientation nord et avions positionnés selon leur direction et leur distance.
+- Un thème jour/nuit automatique, piloté par `sun.sun` ou, si cette entité manque, par l’heure locale.
+- Jusqu’à quatre appareils proches affichés : touchez un avion ou une ligne pour le mettre en vedette.
+- Les données de vol disponibles : destination estimée, origine, compagnie, type, altitude, vitesse, distance et cap.
+- Un visuel d’avion issu d’un modèle 3D correspondant au code type ICAO, sans livrée commerciale sur la cellule.
 
-## Installation manuelle
+La carte est enregistrée automatiquement par l’intégration. À partir de Home Assistant **2026.5**, vous pouvez aussi créer un tableau de bord prérempli avec la stratégie Flights Over Me.
 
-1. Avec HACS, installez le dépôt comme intégration. En installation manuelle, copiez uniquement `custom_components/flights_over_me` vers `<config>/custom_components/flights_over_me` ; les fichiers de la carte et les images sont inclus dans ce dossier. Ce prototype utilise le domaine technique `flights_over_me` : supprimez l’ancienne entrée `avion_domicile` avant de configurer cette version.
-2. Redémarrez Home Assistant, puis dans **Paramètres → Appareils et services → Ajouter une intégration**, cherchez **Flights Over Me**. Choisissez le visuel **Maison** ou **Radar**, puis un rayon de 1 à 100 km (20 km par défaut). Une limite de 100 km évite une mire trop chargée ; le même rayon sert aux deux visuels.
-3. L'intégration enregistre et charge automatiquement la ressource Lovelace. Avec Home Assistant **2026.5 ou plus récent**, crée le tableau de bord prérempli depuis **Paramètres → Tableaux de bord → Ajouter un tableau de bord → Tableaux de bord communautaires → Flights Over Me**. Home Assistant crée alors un nouveau tableau de bord contenant la carte.
+## Aperçu des illustrations d’avions
 
-Sur les versions Home Assistant antérieures à 2026.5, ajoute la carte manuellement au tableau de bord :
+![Aperçu des illustrations des modèles d’avion inclus](www/aircraft-png-preview.png)
+
+*Aperçu des PNG de la bibliothèque, pas une capture de la carte Home Assistant. Les silhouettes proviennent de modèles 3D réels, sont rendues en blanc avec des contours de type croquis et restent sans livrée. Le logo de la compagnie est affiché séparément lorsqu’il est disponible.*
+
+## Avant de commencer
+
+- Home Assistant **2024.4 ou plus récent**.
+- Une latitude et une longitude renseignées dans **Paramètres → Système → Général**.
+- Un accès Internet pour interroger ADSB.lol et, si disponibles, les services de métadonnées des vols.
+- HACS pour l’installation guidée, ou un accès au dossier de configuration pour l’installation manuelle.
+
+Les positions sont interrogées toutes les **15 secondes**. Le rayon est réglable de 1 à 100 km et vaut 20 km par défaut. Il représente la distance horizontale entre le domicile et la position ADS-B reçue ; l’altitude de l’avion n’entre pas dans ce calcul.
+
+## Installer avec HACS
+
+[![Ouvrir dans HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tataille&repository=homeassistant-flightsoverme&category=integration)
+
+HACS doit déjà être installé. Vous pouvez aussi ajouter le dépôt manuellement dans HACS :
+
+1. Ouvrez **HACS → Intégrations → ⋮ → Dépôts personnalisés**.
+2. Ajoutez `https://github.com/tataille/homeassistant-flightsoverme` avec la catégorie **Intégration**.
+3. Recherchez **Flights Over Me**, puis téléchargez l’intégration.
+4. Redémarrez Home Assistant.
+5. Ouvrez **Paramètres → Appareils et services → Ajouter une intégration** et recherchez **Flights Over Me**.
+
+## Installer manuellement
+
+1. [Téléchargez le projet](https://github.com/tataille/homeassistant-flightsoverme/archive/refs/heads/main.zip) et décompressez l’archive.
+2. Copiez `custom_components/flights_over_me` dans le dossier de configuration de Home Assistant.
+3. Vérifiez que le fichier `/config/custom_components/flights_over_me/manifest.json` existe.
+4. Redémarrez Home Assistant et ajoutez **Flights Over Me** depuis **Paramètres → Appareils et services**.
+
+Avec Home Assistant Docker, copiez le dossier dans le répertoire de l’hôte monté sur `/config`. Les fichiers de la carte et les illustrations d’avions sont déjà inclus dans l’intégration.
+
+### Passage depuis le prototype `avion_domicile`
+
+Cette version utilise le domaine technique `flights_over_me`. Supprimez l’ancienne entrée **avion_domicile** dans **Appareils et services**, retirez son ancien dossier `custom_components/avion_domicile`, puis installez et ajoutez **Flights Over Me**. Il s’agit d’un prototype : la configuration précédente n’est pas migrée automatiquement.
+
+## Configurer l’intégration
+
+À l’ajout de l’intégration, choisissez un visuel et un rayon de recherche de **1 à 100 km** (20 km par défaut). Le rayon définit la zone de détection dans les deux modes ; en mode Radar, il fixe aussi l’échelle de la mire. Vous pourrez modifier ces paramètres plus tard dans le menu de l’intégration avec **Reconfigurer**.
+
+| Mode | Présentation |
+|---|---|
+| Maison | Vue de profil de l’avion, fond météo et détails du vol sélectionné. Le jour et la nuit adaptent automatiquement les couleurs de la scène. |
+| Radar | Mire orientée au nord, domicile au centre et appareils répartis selon leur cap et leur distance. La portée correspond au rayon choisi. |
+
+La météo utilise par défaut `weather.forecast_maison`. Pour une autre entité, indiquez `weather_entity` dans la configuration YAML de la carte. Les états de pluie, neige, brouillard, nuages, orage, vent ou éclaircies modifient le ciel illustré ; la température et la condition courante sont également affichées.
+
+## Afficher la carte
+
+La carte est chargée automatiquement après l’installation de l’intégration.
+
+Avec Home Assistant **2026.5 ou plus récent**, créez un tableau de bord contenant la carte depuis **Paramètres → Tableaux de bord → Ajouter un tableau de bord → Tableaux de bord communautaires → Flights Over Me**. Cela crée un nouveau tableau de bord ; un tableau déjà existant n’est pas modifié.
+
+Sur les versions antérieures, ajoutez manuellement une carte **Manuelle** dans le tableau de bord :
 
 ```yaml
 type: custom:avion-domicile-card
-entity: sensor.avion_au_dessus_du_domicile_avion_le_plus_proche
+entity: sensor.flights_over_me_avion_le_plus_proche
 weather_entity: weather.forecast_maison
 ```
 
-La génération crée un tableau de bord séparé ; elle ne modifie pas un tableau de bord existant. Vérifiez l'identifiant exact du capteur sous **Paramètres → Appareils et services → Entités** si Home Assistant lui a attribué un autre nom. Dans le menu de l'intégration, choisissez **Reconfigurer** pour changer ensuite le mode ou le rayon. Après installation ou mise à jour, actualise le navigateur si la carte n'apparaît pas.
+Home Assistant choisit l’identifiant exact du capteur à la création. Si l’exemple ne correspond pas à votre installation, retrouvez l’entité **Avion le plus proche** dans **Outils de développement → États** et remplacez `entity`. Après une mise à jour, rechargez la page du tableau de bord si la carte n’apparaît pas.
 
-La carte met en évidence le modèle, l'altitude, la vitesse et la distance. Le logo de la compagnie (ou son sigle si aucun logo ne peut être chargé) s'affiche dans le ciel juste au-dessus de la séparation avec les détails. Un appareil classé militaire sans illustration dédiée reçoit une silhouette générique d'avion et aucun logo de compagnie ; les autres contacts sans PNG exact gardent l'OVNI de remplacement avec une mention explicite.
+## Comprendre les informations de vol
 
-## Données exposées
+L’intégration crée un capteur **Avion le plus proche**. Ses attributs incluent :
 
-L'entité capteur contient les attributs `nearest`, `aircraft`, `aircraft_count`, `radius_km` et `data_source`. Chaque appareil peut inclure son indicatif, son immatriculation, son type, sa position, altitude, vitesse sol, cap, taux vertical et ancienneté de la mesure. Les quatre appareils les plus proches peuvent aussi contenir `aircraft_manufacturer`, `aircraft_icao_type`, `airline_name`, `airline_logo`, `airline_iata`, `origin_city`, `destination_city`, `origin_iata` et `destination_iata`. Les vitesses sont converties en km/h et les altitudes en mètres pour l'affichage.
+| Attribut | Contenu |
+|---|---|
+| `aircraft_count` | Nombre d’appareils détectés dans le rayon choisi |
+| `aircraft` | Liste des appareils reçus et leurs données disponibles |
+| `nearest` | Appareil actuellement le plus proche |
+| `radius_km` | Rayon de recherche en kilomètres |
+| `home_latitude`, `home_longitude` | Coordonnées du domicile utilisées par l’intégration |
+| `display_mode` | `house` ou `radar` |
+| `data_source` | Source des positions, `ADSB.lol` |
 
-## Développement
+Un appareil peut également fournir son indicatif, son immatriculation, son code ICAO, son type, sa position, son altitude, sa vitesse sol, son cap et l’âge de la mesure. La compagnie et l’itinéraire sont des informations complémentaires : elles ne sont pas diffusées par tous les vols.
 
-Le composant est autonome et n'installe aucune dépendance Python supplémentaire. Les appels utilisent la session HTTP partagée de Home Assistant.
+## Données, illustrations et limites
 
-Les rendus existants peuvent être parcourus dans `www/aircraft-png-preview.png`. Pour en générer de nouveaux, fournissez à `tools/render_aircraft_3d_profiles.py` un dossier de modèles GLB v2 issus du dépôt source, après conversion des GLB v1 avec `gltf-pipeline`. L'outil de rendu s'appuie sur `numpy<2`, `trimesh`, `pyrender`, `Pillow` et `PyOpenGL`; ces bibliothèques servent uniquement à créer les PNG et ne sont pas nécessaires sur Home Assistant.
+Les positions proviennent de l’API ouverte [ADSB.lol](https://api.adsb.lol/docs). Les informations complémentaires sur le type et la compagnie sont recherchées auprès d’[ADSBDB](https://github.com/mrjackwills/adsbdb). Une route probable est recherchée auprès d’ADSB.lol à partir de l’indicatif ; la destination affichée reste une estimation et peut manquer ou être erronée.
+
+La bibliothèque contient 33 rendus PNG associés aux codes ICAO du catalogue. Les modèles 3D proviennent de [Flightradar24/fr24-3d-models](https://github.com/Flightradar24/fr24-3d-models), qui crédite FlightGear et FGMEMBERS et indique la licence GPL-2.0 pour les modèles d’avion. Consultez les [crédits](www/aircraft-png/ATTRIBUTION.txt) et la [licence des illustrations](www/aircraft-png/LICENSE-GPL-2.0.txt). Le code de l’intégration est sous licence [Apache 2.0](LICENSE).
+
+La couverture ADS-B dépend des récepteurs de la source et n’est pas garantie partout. Un avion sans transpondeur ADS-B actif, sans position récente ou non reçu par le réseau peut ne pas apparaître. Le rayon ne correspond pas à une observation visuelle ni à la distance verticale. Le logo n’est affiché que si la compagnie est reconnue et si son image est disponible. Les avions inconnus ont un pictogramme de remplacement ; les appareils classés militaires sans modèle dédié ont une silhouette générique, sans logo commercial.
+
+## Dépannage
+
+**Aucun avion n’apparaît alors qu’un appareil vient de passer.**
+
+Vérifiez `aircraft_count`, `radius_km`, `home_latitude` et `home_longitude` dans les attributs du capteur. Comparez les coordonnées à celles de **Paramètres → Système → Général** et vérifiez que le rayon englobe la position horizontale estimée de l’avion. L’API est interrogée toutes les 15 secondes, mais un passage peut encore être manqué si aucune position ADS-B n’est reçue. Consultez **Paramètres → Système → Journaux** pour repérer une erreur `flights_over_me` ou ADSB.lol.
+
+**Le tableau de bord ou la carte n’apparaît pas.**
+
+Vérifiez que l’intégration est chargée, redémarrez Home Assistant et rechargez le navigateur. Le tableau de bord par stratégie est disponible à partir de Home Assistant 2026.5 ; sur une version plus ancienne, ajoutez la carte manuellement.
+
+**La destination, la compagnie ou le logo est absent.**
+
+Ces informations dépendent des bases externes et de l’indicatif reçu. Certains vols privés, charters ou non réguliers n’ont pas d’itinéraire reconnu. L’absence de métadonnées n’empêche pas l’affichage de la position ADS-B.
+
+## Mise à jour
+
+Avec HACS, téléchargez la version proposée puis redémarrez Home Assistant. En installation manuelle, remplacez `custom_components/flights_over_me` par le dossier de la version mise à jour, puis redémarrez Home Assistant. Ne supprimez pas l’entrée de l’intégration lors d’une mise à jour normale de Flights Over Me.
+
+## Contribuer et obtenir de l’aide
+
+Pour signaler un problème ou proposer une amélioration, ouvrez une [issue GitHub](https://github.com/tataille/homeassistant-flightsoverme/issues). Indiquez la version de Home Assistant, la version de l’intégration, le rayon choisi et les messages de journal pertinents. Évitez de publier vos coordonnées personnelles.
+
+Les rendus existants sont visibles dans [`www/aircraft-png-preview.png`](www/aircraft-png-preview.png). Pour en générer d’autres, consultez le [guide des illustrations](AIRCRAFT_ILLUSTRATION_SPEC.md) et le script [`tools/render_aircraft_3d_profiles.py`](tools/render_aircraft_3d_profiles.py). Ces outils de création ne sont pas nécessaires au fonctionnement de Home Assistant.
+
+Licence du code : [Apache 2.0](LICENSE). Les modèles 3D et illustrations conservent les licences indiquées dans leurs fichiers d’attribution.
