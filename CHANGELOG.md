@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.1](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.9.0...v2.9.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* restore Flights Over Me dashboard strategy ([5397fde](https://github.com/tataille/homeassistant-flightsoverme/commit/5397fde8149ba938f3a717eda352653e19147833))
+
 ## [2.9.0](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.8.0...v2.9.0) (2026-10-16)
 
 
