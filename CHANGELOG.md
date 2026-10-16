@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.2](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.9.1...v2.9.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* detect Flights Over Me sensor while unavailable ([a9a124a](https://github.com/tataille/homeassistant-flightsoverme/commit/a9a124ae13523254848f9e7a6e76efde30c074b9))
+
 ## [2.9.1](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.9.0...v2.9.1) (2026-10-16)
 
 
