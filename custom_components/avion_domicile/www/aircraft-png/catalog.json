@@ -1,0 +1,299 @@
+[
+  {
+    "code": "A318",
+    "model": "Airbus A318",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a318.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A319",
+    "model": "Airbus A319",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a319.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A320",
+    "model": "Airbus A320",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a320.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A321",
+    "model": "Airbus A321",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a321.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A332",
+    "model": "Airbus A330-200",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a332.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A333",
+    "model": "Airbus A330-300",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a333.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A343",
+    "model": "Airbus A340-300",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a343.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A346",
+    "model": "Airbus A340-600",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a346.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A359",
+    "model": "Airbus A350-900",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a359.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "A388",
+    "model": "Airbus A380-800",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/a380.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "AT45",
+    "model": "ATR 42-500",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/atr42.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B736",
+    "model": "Boeing 737-600",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b736.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B737",
+    "model": "Boeing 737-700",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b737.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B738",
+    "model": "Boeing 737-800",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b738.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B739",
+    "model": "Boeing 737-900",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b739.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B744",
+    "model": "Boeing 747-400",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b744.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B748",
+    "model": "Boeing 747-8 Intercontinental",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b748.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B752",
+    "model": "Boeing 757-200",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b752.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B753",
+    "model": "Boeing 757-300",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b753.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B762",
+    "model": "Boeing 767-200",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b762.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B763",
+    "model": "Boeing 767-300",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b763.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B764",
+    "model": "Boeing 767-400",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b764.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B772",
+    "model": "Boeing 777-200",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b772.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B773",
+    "model": "Boeing 777-300",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b773.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B788",
+    "model": "Boeing 787-8",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b788.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "B789",
+    "model": "Boeing 787-9",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/b789.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "BCS1",
+    "model": "Airbus A220-100 (CS100)",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/cs100.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "BCS3",
+    "model": "Airbus A220-300 (CS300)",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/cs300.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "CRJ7",
+    "model": "Bombardier CRJ700",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/crj700.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "CRJ9",
+    "model": "Bombardier CRJ900",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/crj900.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "DH8D",
+    "model": "De Havilland Canada Dash 8-400",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/q400.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "E170",
+    "model": "Embraer E170",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/e170.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  },
+  {
+    "code": "E190",
+    "model": "Embraer E190",
+    "source": "https://github.com/Flightradar24/fr24-3d-models/blob/master/models/e190.glb",
+    "license": "GPL-2.0",
+    "view": "profile",
+    "nose": "right",
+    "livery": "removed; white hand-sketched rendering"
+  }
+]

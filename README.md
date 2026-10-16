@@ -16,12 +16,11 @@ Le service fournit des positions ADS-B reçues par son réseau. La couverture n'
 
 ## Installation manuelle
 
-1. Copiez `custom_components/avion_domicile` dans `<config>/custom_components/avion_domicile`.
-2. Redémarrez Home Assistant.
-3. Dans **Paramètres → Appareils et services → Ajouter une intégration**, cherchez **Avion au-dessus du domicile**. Choisissez le visuel **Maison** ou **Radar**, puis un rayon de 1 à 100 km (20 km par défaut). Une limite de 100 km évite une mire trop chargée ; le même rayon sert aux deux visuels.
-4. Copiez `www/avion-domicile-card.js` et `www/aircraft-png-library.js` vers `<config>/www/`. Copiez aussi tout le dossier `www/aircraft-png/` vers `<config>/www/aircraft-png/`.
-5. Dans **Paramètres → Tableaux de bord → Ressources**, ajoutez `/local/avion-domicile-card.js` en type **Module JavaScript**. La bibliothèque PNG est importée par la carte. Si l'interface demande une URL complète, utilisez `/local/avion-domicile-card.js?v=2.8.0`.
-6. Ajoutez une carte manuelle au tableau de bord :
+1. Avec HACS, installez le dépôt comme intégration. En installation manuelle, copiez uniquement `custom_components/avion_domicile` vers `<config>/custom_components/avion_domicile` ; les fichiers de la carte et les images sont maintenant inclus dans ce dossier.
+2. Redémarrez Home Assistant, puis dans **Paramètres → Appareils et services → Ajouter une intégration**, cherchez **Avion au-dessus du domicile**. Choisissez le visuel **Maison** ou **Radar**, puis un rayon de 1 à 100 km (20 km par défaut). Une limite de 100 km évite une mire trop chargée ; le même rayon sert aux deux visuels.
+3. L'intégration enregistre et charge automatiquement la ressource Lovelace. Avec Home Assistant **2026.5 ou plus récent**, crée le tableau de bord prérempli depuis **Paramètres → Tableaux de bord → Ajouter un tableau de bord → Tableaux de bord communautaires → Avions au-dessus du domicile**. Home Assistant crée alors un nouveau tableau de bord contenant la carte.
+
+Sur les versions Home Assistant antérieures à 2026.5, ajoute la carte manuellement au tableau de bord :
 
 ```yaml
 type: custom:avion-domicile-card
@@ -29,7 +28,7 @@ entity: sensor.avion_au_dessus_du_domicile_avion_le_plus_proche
 weather_entity: weather.forecast_maison
 ```
 
-Vérifiez l'identifiant exact de l'entité sous **Paramètres → Appareils et services → Entités** si Home Assistant lui a attribué un autre nom. Dans le menu de l'intégration, choisissez **Reconfigurer** pour changer ensuite le mode ou le rayon. Après installation, videz le cache du navigateur si la carte n'apparaît pas. Après une mise à jour, changez aussi le paramètre de ressource, par exemple `?v=2.8.0`, pour forcer le chargement de la nouvelle carte.
+La génération crée un tableau de bord séparé ; elle ne modifie pas un tableau de bord existant. Vérifiez l'identifiant exact du capteur sous **Paramètres → Appareils et services → Entités** si Home Assistant lui a attribué un autre nom. Dans le menu de l'intégration, choisissez **Reconfigurer** pour changer ensuite le mode ou le rayon. Après installation ou mise à jour, actualise le navigateur si la carte n'apparaît pas.
 
 La carte met en évidence le modèle, l'altitude, la vitesse et la distance. Le logo de la compagnie (ou son sigle si aucun logo ne peut être chargé) s'affiche dans le ciel juste au-dessus de la séparation avec les détails. Un appareil classé militaire sans illustration dédiée reçoit une silhouette générique d'avion et aucun logo de compagnie ; les autres contacts sans PNG exact gardent l'OVNI de remplacement avec une mention explicite.
 

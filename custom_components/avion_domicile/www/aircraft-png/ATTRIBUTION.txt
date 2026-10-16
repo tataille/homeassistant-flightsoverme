@@ -1,0 +1,6 @@
+Aircraft geometry source: Flightradar24/fr24-3d-models
+https://github.com/Flightradar24/fr24-3d-models
+
+The upstream README credits the aircraft models to the FlightGear project and FGMEMBERS. The project states that all aircraft models other than the Millennium Falcon and Santa are licensed under GPLv2.
+Changes made here: converted to transparent PNG side views, removed all original material colours/liveries, rendered the aircraft white with graphite contours and hatching, and oriented the nose to the right.
+No airline livery or logo is baked into these PNGs.
