@@ -279,11 +279,24 @@ class AvionDomicileDashboardStrategy extends HTMLElement {
 }
 
 customElements.define("ll-strategy-dashboard-avion-domicile", AvionDomicileDashboardStrategy);
+// Compatibility alias for dashboards created with the earlier card type as strategy.
+customElements.define(
+  "ll-strategy-dashboard-avion-domicile-card",
+  class extends AvionDomicileDashboardStrategy {},
+);
 window.customStrategies = window.customStrategies || [];
 window.customStrategies.push({
   type: "avion-domicile",
   strategyType: "dashboard",
   name: "Flights Over Me",
   description: "Crée automatiquement un tableau de bord avec la carte des vols proches.",
+  documentationURL: "https://github.com/tataille/homeassistant-flightsoverme",
+});
+// Keep existing dashboards that stored the card type as their strategy working.
+window.customStrategies.push({
+  type: "avion-domicile-card",
+  strategyType: "dashboard",
+  name: "Flights Over Me (compatibilité)",
+  description: "Compatibilité avec les anciens tableaux de bord Flights Over Me.",
   documentationURL: "https://github.com/tataille/homeassistant-flightsoverme",
 });
