@@ -244,7 +244,7 @@ def main() -> None:
     js = ["/* Neutral real-geometry profile PNGs; ICAO codes without an exact asset have no fallback. */",
           "const AIRCRAFT_PNG_CATALOG = {"]
     for item in catalog:
-        js.append(f'  "{item["code"]}": {{ model: "{item["model"]}", src: "/avion_domicile/static/aircraft-png/{item["code"]}.png" }},')
+        js.append(f'  "{item["code"]}": {{ model: "{item["model"]}", src: "/flights_over_me/static/aircraft-png/{item["code"]}.png" }},')
     js.extend(["};", "", "export function aircraftPngForType(type) {",
                '  const code = String(type || "").toUpperCase().replace(/[^A-Z0-9]/g, "");',
                "  const item = AIRCRAFT_PNG_CATALOG[code];",

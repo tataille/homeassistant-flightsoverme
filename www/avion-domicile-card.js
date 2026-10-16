@@ -238,11 +238,11 @@ function escapeHtml(value) {
 
 customElements.define("avion-domicile-card", AvionDomicileCard);
 window.customCards = window.customCards || [];
-window.customCards.push({type:"avion-domicile-card", name:"Avion au-dessus du domicile", description:"Affiche les avions proches avec météo et thèmes jour/nuit automatiques."});
+window.customCards.push({type:"avion-domicile-card", name:"Flights Over Me", description:"Affiche les avions proches avec météo et thèmes jour/nuit automatiques."});
 
 class AvionDomicileDashboardStrategy extends HTMLElement {
   static getCreateSuggestions() {
-    return {title: "Avions au-dessus du domicile", icon: "mdi:airplane"};
+    return {title: "Flights Over Me", icon: "mdi:airplane"};
   }
 
   static async generate(config, hass) {
@@ -252,7 +252,7 @@ class AvionDomicileDashboardStrategy extends HTMLElement {
     const weatherEntity = Object.keys(hass.states || {}).find((entityId) => entityId.startsWith("weather."))
       || "weather.forecast_maison";
     return {
-      title: config.title || "Avions au-dessus du domicile",
+      title: config.title || "Flights Over Me",
       views: [{
         title: "Avions",
         path: "avions",
@@ -271,7 +271,7 @@ window.customStrategies = window.customStrategies || [];
 window.customStrategies.push({
   type: "avion-domicile",
   strategyType: "dashboard",
-  name: "Avions au-dessus du domicile",
+  name: "Flights Over Me",
   description: "Crée automatiquement un tableau de bord avec la carte des vols proches.",
   documentationURL: "https://github.com/tataille/homeassistant-flightsoverme",
 });

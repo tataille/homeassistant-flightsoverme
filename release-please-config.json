@@ -10,7 +10,7 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "custom_components/avion_domicile/manifest.json",
+          "path": "custom_components/flights_over_me/manifest.json",
           "jsonpath": "$.version"
         }
       ]

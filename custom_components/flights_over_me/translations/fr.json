@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Avion au-dessus du domicile",
+        "title": "Flights Over Me",
         "description": "La position provient des paramètres généraux de Home Assistant. Choisissez le visuel et le rayon de recherche (1 à 100 km, 20 km par défaut). Le même rayon détermine la portée du radar.",
         "data": {
           "display_mode": "Mode d’affichage",
