@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.3](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.9.2...v2.9.3) (2026-10-16)
+
+
+### Bug Fixes
+
+* back off after ADSB.lol rate limits ([ce0e258](https://github.com/tataille/homeassistant-flightsoverme/commit/ce0e25815f48287d4b5d7e719ca3b98b31da77bf))
+
 ## [2.9.2](https://github.com/tataille/homeassistant-flightsoverme/compare/v2.9.1...v2.9.2) (2026-10-16)
 
 

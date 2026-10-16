@@ -8,5 +8,5 @@
   ],
   "documentation": "https://github.com/tataille/homeassistant-flightsoverme",
   "iot_class": "cloud_polling",
-  "version": "2.9.2"
+  "version": "2.9.3"
 }
